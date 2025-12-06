@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Master Plan - Tabbed</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #0f0f0f;
+            color: #e4e4e7;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 1.8em;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #a1a1aa;
+            font-size: 0.95em;
+        }
+
+        /* Main App Card */
+        .app-card {
+            background: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #2d2d2d;
+            transition: border-color 0.3s;
+        }
+
+        .app-card.emily-active {
+            border-color: #6366f1;
+        }
+
+        .app-card.lucas-active {
+            border-color: #8b5cf6;
+        }
+
+        /* Filter Bar at Top */
+        .filter-bar {
+            background: #141414;
+            padding: 15px 20px;
+            border-bottom: 2px solid #2d2d2d;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-bar label {
+            color: #71717a;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        /* Tab Navigation - Bottom Left */
+        .tabs {
+            display: flex;
+            gap: 12px;
+            padding: 0 20px 15px 20px;
+        }
+
+        .tab-btn {
+            padding: 12px 28px;
+            background: #2d2d2d;
+            border: 2px solid #3d3d3d;
+            color: #a1a1aa;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 700;
+            transition: all 0.3s;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tab-btn:hover::before {
+            opacity: 1;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            border-color: #6366f1;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            border-color: #6366f1;
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+        }
+
+        .tab-btn.active.lucas-tab {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            border-color: #8b5cf6;
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+        }
+
+        .tab-btn.lucas-tab:hover {
+            border-color: #8b5cf6;
+        }
+
+        .tab-count {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            margin-left: 6px;
+            min-width: 22px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .tab-btn.active .tab-count {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Tab Content Area */
+        .tab-content-area {
+            padding: 20px;
+        }
+
+        /* Top Bar with Actions and Totals */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .actions-container {
+            background: #141414;
+            padding: 15px 20px;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 0 1 auto;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .action-row label {
+            color: #71717a;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-right: 10px;
+            min-width: 140px;
+        }
+
+        .totals {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-width: 280px;
+            flex: 0 1 auto;
+        }
+
+        .total-box {
+            background: #141414;
+            padding: 15px 18px;
+            border-radius: 6px;
+            border-left: 4px solid #6366f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-box.required {
+            border-left-color: #10b981;
+        }
+
+        .total-box.optional {
+            border-left-color: #f59e0b;
+        }
+
+        .total-label {
+            font-size: 0.85em;
+            color: #a1a1aa;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .total-amount {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .filter-btn {
+            padding: 6px 14px;
+            background: #2d2d2d;
+            border: 1px solid #3d3d3d;
+            color: #e4e4e7;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            background: #3d3d3d;
+            border-color: #6366f1;
+        }
+
+        .filter-btn.active {
+            background: #6366f1;
+            border-color: #6366f1;
+            color: #fff;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            background: #6366f1;
+            border: 1px solid #6366f1;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: #4f46e5;
+            border-color: #4f46e5;
+            transform: translateY(-1px);
+        }
+
+        .action-btn.secondary {
+            background: #64748b;
+            border-color: #64748b;
+        }
+
+        .action-btn.secondary:hover {
+            background: #475569;
+            border-color: #475569;
+        }
+
+        .select-btn {
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid #6366f1;
+            color: #6366f1;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .select-btn:hover {
+            background: #6366f1;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #0f0f0f;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #2d2d2d;
+            transition: filter 0.3s ease;
+        }
+
+        table.blurred {
+            filter: blur(8px);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .emily-active table {
+            border-color: rgba(99, 102, 241, 0.25);
+        }
+
+        .lucas-active table {
+            border-color: rgba(139, 92, 246, 0.25);
+        }
+
+        thead {
+            background: #1a1a1a;
+        }
+
+        .emily-active thead {
+            background: linear-gradient(180deg, rgba(99, 102, 241, 0.12) 0%, #1a1a1a 100%);
+        }
+
+        .lucas-active thead {
+            background: linear-gradient(180deg, rgba(139, 92, 246, 0.12) 0%, #1a1a1a 100%);
+        }
+
+        th {
+            padding: 10px 12px;
+            text-align: left;
+            font-size: 0.8em;
+            font-weight: 600;
+            color: #a1a1aa;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #2d2d2d;
+        }
+
+        .emily-active th {
+            border-bottom-color: rgba(99, 102, 241, 0.25);
+        }
+
+        .lucas-active th {
+            border-bottom-color: rgba(139, 92, 246, 0.25);
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #2d2d2d;
+            transition: background 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        tbody tr:hover {
+            background: #242424;
+        }
+
+        tbody tr.selected {
+            background: rgba(99, 102, 241, 0.12);
+            border-left: 4px solid #6366f1;
+        }
+
+        tbody tr.selected:hover {
+            background: rgba(99, 102, 241, 0.18);
+        }
+
+        tbody tr.completed {
+            background: rgba(220, 38, 38, 0.15);
+            border-left: 4px solid #dc2626;
+            opacity: 0.7;
+        }
+
+        tbody tr.completed:hover {
+            background: rgba(220, 38, 38, 0.22);
+        }
+
+        tbody tr.completed .item-name {
+            text-decoration: line-through;
+            color: #a1a1aa;
+        }
+
+        tbody tr.completed.selected {
+            background: rgba(220, 38, 38, 0.25);
+            border-left: 4px solid #dc2626;
+        }
+
+        tbody tr.hidden {
+            display: none;
+        }
+
+        tbody tr.research-row,
+        tbody tr.images-row {
+            background: #141414;
+            cursor: default;
+        }
+
+        tbody tr.research-row {
+            border-left: 3px solid #6366f1;
+        }
+
+        tbody tr.images-row {
+            border-left: 3px solid #8b5cf6;
+        }
+
+        tbody tr.research-row td,
+        tbody tr.images-row td {
+            padding: 20px;
+        }
+
+        tbody tr.research-row.hidden,
+        tbody tr.images-row.hidden {
+            display: none;
+        }
+
+        .item-buttons {
+            margin-top: 6px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .research-toggle,
+        .images-toggle {
+            display: inline-block;
+            background: transparent;
+            color: #6366f1;
+            padding: 4px 10px;
+            border: 1px solid #6366f1;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .research-toggle:hover,
+        .images-toggle:hover {
+            background: #6366f1;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .images-toggle {
+            color: #8b5cf6;
+            border-color: #8b5cf6;
+        }
+
+        .images-toggle:hover {
+            background: #8b5cf6;
+            color: #fff;
+        }
+
+        .research-content {
+            color: #e4e4e7;
+        }
+
+        .research-content h4 {
+            color: #6366f1;
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .images-content {
+            color: #e4e4e7;
+        }
+
+        .images-content h4 {
+            color: #8b5cf6;
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .images-carousel {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 0;
+            scroll-snap-type: x mandatory;
+        }
+
+        .images-carousel::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .images-carousel::-webkit-scrollbar-track {
+            background: #2d2d2d;
+            border-radius: 4px;
+        }
+
+        .images-carousel::-webkit-scrollbar-thumb {
+            background: #8b5cf6;
+            border-radius: 4px;
+        }
+
+        .carousel-image {
+            min-width: 250px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #3d3d3d;
+            scroll-snap-align: start;
+            transition: transform 0.2s;
+        }
+
+        .carousel-image:hover {
+            transform: scale(1.05);
+            border-color: #8b5cf6;
+        }
+
+        .research-section {
+            margin-bottom: 20px;
+        }
+
+        .research-section h5 {
+            color: #818cf8;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .research-section ul {
+            margin-left: 20px;
+            line-height: 1.7;
+        }
+
+        .research-section li {
+            color: #a1a1aa;
+            margin-bottom: 5px;
+        }
+
+        .research-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .research-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 2px solid #3d3d3d;
+        }
+
+        .research-source {
+            font-size: 0.8em;
+            color: #71717a;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        td {
+            padding: 12px;
+            font-size: 1em;
+        }
+
+        td:first-child {
+            padding-left: 30px;
+        }
+
+        .star-rating {
+            display: inline-flex;
+            gap: 4px;
+        }
+
+        .star {
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .star.filled {
+            color: #f59e0b;
+        }
+
+        .star.empty {
+            color: #3d3d3d;
+        }
+
+        .star:hover {
+            transform: scale(1.2);
+        }
+
+        .item-name {
+            font-weight: 600;
+            color: #fff;
+            font-size: 1.05em;
+            margin-bottom: 5px;
+        }
+
+        .priority-tag {
+            display: inline-block;
+            background: rgba(220, 38, 38, 0.15);
+            color: #ef4444;
+            padding: 2px 8px;
+            border: 1px solid #dc2626;
+            border-radius: 3px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-required {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .status-optional {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        .price-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            gap: 6px;
+        }
+
+        .price-item {
+            background: #2d2d2d;
+            padding: 6px 8px;
+            border-radius: 4px;
+            text-align: center;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .price-item:hover {
+            background: #3d3d3d;
+            transform: translateY(-1px);
+        }
+
+        .price-item a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .store-name {
+            font-size: 0.75em;
+            color: #a1a1aa;
+            margin-bottom: 2px;
+        }
+
+        .price {
+            font-size: 0.95em;
+            font-weight: 700;
+            color: #6366f1;
+        }
+
+        .price.best {
+            color: #10b981;
+        }
+
+        .notes {
+            color: #a1a1aa;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+
+        .range {
+            color: #a1a1aa;
+            font-size: 0.95em;
+        }
+
+        .value-tag {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        .drop-tag {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        .google-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 6px;
+            background: #2d2d2d;
+            border-radius: 4px;
+            transition: all 0.2s;
+            cursor: pointer;
+            margin-top: 6px;
+            font-size: 1.2em;
+        }
+
+        .google-icon:hover {
+            background: #3d3d3d;
+            transform: scale(1.05);
+        }
+
+        .google-icon a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .selected-total {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .selected-total.show {
+            display: flex;
+        }
+
+        .selected-total-label {
+            color: #fff;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .selected-total-amount {
+            color: #fff;
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        .alert-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1a1a;
+            border: 2px solid #ef4444;
+            border-radius: 8px;
+            padding: 20px;
+            z-index: 1000;
+            min-width: 300px;
+            max-width: 500px;
+            display: none;
+        }
+
+        .alert-modal.show {
+            display: block;
+        }
+
+        .alert-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            display: none;
+        }
+
+        .alert-overlay.show {
+            display: block;
+        }
+
+        .alert-title {
+            color: #ef4444;
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .alert-content {
+            color: #e4e4e7;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .alert-close {
+            padding: 6px 14px;
+            background: #6366f1;
+            border: none;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .alert-close:hover {
+            background: #4f46e5;
+        }
+
+        footer {
+            margin-top: 20px;
+            padding: 15px;
+            background: #1a1a1a;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.8em;
+            color: #71717a;
+        }
+
+        @media (max-width: 1200px) {
+            .price-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.85em;
+            }
+
+            .price-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Gift Master Plan</h1>
+            <p class="subtitle">Christmas & Anniversary 2025 | Price Comparison</p>
+        </header>
+
+        <!-- Main App Card -->
+        <div class="app-card emily-active" id="appCard">
+            <!-- Filter Bar (Universal) -->
+            <div class="filter-bar">
+                <label>View:</label>
+                <button class="filter-btn active" onclick="filterItems(currentTab, 'all')">All</button>
+                <button class="filter-btn" onclick="filterItems(currentTab, 'required')">Required</button>
+                <button class="filter-btn" onclick="filterItems(currentTab, 'optional')">Optional</button>
+                <button class="filter-btn" onclick="filterItems(currentTab, 'high-value')">High Value</button>
+            </div>
+
+            <!-- Tab Navigation (Large, Centered) -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('emily')">
+                    Emily <span class="tab-count" id="emily-count">0</span>
+                </button>
+                <button class="tab-btn lucas-tab" onclick="switchTab('lucas')">
+                    Lucas <span class="tab-count" id="lucas-count">0</span>
+                </button>
+            </div>
+
+            <!-- Emily's Tab Content -->
+            <div id="emily-tab" class="tab-content active">
+                <div class="tab-content-area">
+                    <div class="top-bar">
+                        <div class="actions-container">
+                            <div class="action-row">
+                                <label>Selection:</label>
+                                <button class="select-btn" onclick="selectAll('emily')">Select All</button>
+                                <button class="select-btn" onclick="selectRequired('emily')">Select Required</button>
+                                <button class="select-btn" onclick="selectOptional('emily')">Select Optional</button>
+                                <button class="select-btn" onclick="clearSelection('emily')">Clear</button>
+                            </div>
+                            <div class="action-row">
+                                <label>Open in Tabs:</label>
+                                <button class="action-btn" onclick="openSelected('emily', 'cheapest')">Open Cheapest</button>
+                                <button class="action-btn secondary" onclick="openSelected('emily', 'highend')">Open Highend</button>
+                                <button class="action-btn secondary" onclick="openSelected('emily', 'amazon')">Open Amazon</button>
+                            </div>
+                            <div class="action-row">
+                                <label>Mark Purchased:</label>
+                                <button class="action-btn" onclick="markSelectedAsComplete('emily')" style="background: #dc2626; border-color: #dc2626;">Mark as Purchased</button>
+                                <button class="action-btn secondary" onclick="unmarkSelectedAsComplete('emily')">Unmark</button>
+                            </div>
+                        </div>
+
+                        <div class="totals" id="emily-totals">
+                            <!-- Totals populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="selected-total" id="emily-selectedTotal">
+                        <div class="selected-total-label">Selected Items Total:</div>
+                        <div class="selected-total-amount" id="emily-selectedTotalAmount">$0 - $0</div>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 20%;">Item</th>
+                                <th style="width: 7%;">Status</th>
+                                <th style="width: 7%;">Range</th>
+                                <th style="width: 10%;">Rating</th>
+                                <th style="width: 33%;">Price Comparison</th>
+                                <th style="width: 23%;">Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="emily-itemsTable">
+                            <!-- Items populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Lucas's Tab Content -->
+            <div id="lucas-tab" class="tab-content">
+                <div class="tab-content-area">
+                    <div class="top-bar">
+                        <div class="actions-container">
+                            <div class="action-row">
+                                <label>Selection:</label>
+                                <button class="select-btn" onclick="selectAll('lucas')">Select All</button>
+                                <button class="select-btn" onclick="selectRequired('lucas')">Select Required</button>
+                                <button class="select-btn" onclick="selectOptional('lucas')">Select Optional</button>
+                                <button class="select-btn" onclick="clearSelection('lucas')">Clear</button>
+                            </div>
+                            <div class="action-row">
+                                <label>Open in Tabs:</label>
+                                <button class="action-btn" onclick="openSelected('lucas', 'cheapest')">Open Cheapest</button>
+                                <button class="action-btn secondary" onclick="openSelected('lucas', 'highend')">Open Highend</button>
+                                <button class="action-btn secondary" onclick="openSelected('lucas', 'amazon')">Open Amazon</button>
+                            </div>
+                            <div class="action-row">
+                                <label>Mark Purchased:</label>
+                                <button class="action-btn" onclick="markSelectedAsComplete('lucas')" style="background: #dc2626; border-color: #dc2626;">Mark as Purchased</button>
+                                <button class="action-btn secondary" onclick="unmarkSelectedAsComplete('lucas')">Unmark</button>
+                            </div>
+                        </div>
+
+                        <div class="totals" id="lucas-totals">
+                            <!-- Totals populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="selected-total" id="lucas-selectedTotal">
+                        <div class="selected-total-label">Selected Items Total:</div>
+                        <div class="selected-total-amount" id="lucas-selectedTotalAmount">$0 - $0</div>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 20%;">Item</th>
+                                <th style="width: 7%;">Status</th>
+                                <th style="width: 7%;">Range</th>
+                                <th style="width: 10%;">Rating</th>
+                                <th style="width: 33%;">Price Comparison</th>
+                                <th style="width: 23%;">Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lucas-itemsTable">
+                            <!-- Items populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert-overlay" id="alertOverlay" onclick="closeAlert()"></div>
+        <div class="alert-modal" id="alertModal">
+            <div class="alert-title" id="alertTitle">Alert</div>
+            <div class="alert-content" id="alertContent"></div>
+            <button class="alert-close" onclick="closeAlert()">OK</button>
+        </div>
+
+        <footer>
+            Prices are estimates - click to verify on retailer sites | Moving in 6mo (avoid bulk) | Cruise Feb (swimsuit priority)
+        </footer>
+    </div>
+
+    <script src="gift-data.js"></script>
+    <script src="gift-app.js"></script>
+</body>
+</html>

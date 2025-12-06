@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl:*)",
+      "Bash(move \"C:\\Users\\kevin\\projects\\giftwise\\app\\(dashboard)\\page.tsx\" \"C:\\Users\\kevin\\projects\\giftwise\\app\\(dashboard)\\dashboard\\page.tsx\")",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

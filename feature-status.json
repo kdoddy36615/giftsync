@@ -1,0 +1,105 @@
+{
+  "project": "giftwise",
+  "lastUpdated": "2025-12-06T13:00:00Z",
+  "features": [
+    {
+      "id": "project-setup",
+      "name": "Project Setup",
+      "status": "complete",
+      "agent": "main",
+      "files": ["package.json", "tsconfig.json", "tailwind.config.ts", ".env.local"]
+    },
+    {
+      "id": "supabase-database",
+      "name": "Supabase Database Schema",
+      "status": "complete",
+      "agent": "main",
+      "files": ["supabase/migrations/001_initial_schema.sql"]
+    },
+    {
+      "id": "supabase-client",
+      "name": "Supabase Client Setup",
+      "status": "complete",
+      "agent": "Agent 1",
+      "files": ["lib/supabase/client.ts", "lib/supabase/server.ts"]
+    },
+    {
+      "id": "database-types",
+      "name": "Database Types",
+      "status": "complete",
+      "agent": "Agent 1",
+      "files": ["types/database.ts"]
+    },
+    {
+      "id": "auth-pages",
+      "name": "Authentication Pages",
+      "status": "complete",
+      "agent": "Agent 3",
+      "files": ["app/(auth)/login/page.tsx", "app/(auth)/signup/page.tsx", "app/(auth)/layout.tsx"]
+    },
+    {
+      "id": "ui-components",
+      "name": "Base UI Components",
+      "status": "complete",
+      "agent": "Agent 2",
+      "files": ["components/ui/button.tsx", "components/ui/input.tsx", "components/ui/modal.tsx", "lib/utils.ts"]
+    },
+    {
+      "id": "auth-middleware",
+      "name": "Auth Middleware",
+      "status": "complete",
+      "agent": "project-manager",
+      "files": ["middleware.ts"]
+    },
+    {
+      "id": "dashboard-layout",
+      "name": "Dashboard Layout",
+      "status": "complete",
+      "agent": "project-manager",
+      "files": ["app/(dashboard)/layout.tsx", "app/(dashboard)/page.tsx"]
+    },
+    {
+      "id": "dashboard-types-hooks",
+      "name": "Dashboard Types & Hooks",
+      "status": "complete",
+      "agent": "project-manager",
+      "files": ["types/dashboard.ts", "hooks/use-selection.ts", "hooks/use-privacy-blur.ts", "hooks/use-bulk-open.ts"]
+    },
+    {
+      "id": "gift-list-tabs",
+      "name": "Gift List Tabs Component",
+      "status": "pending",
+      "agent": null,
+      "files": ["components/dashboard/gift-list-tabs.tsx"]
+    },
+    {
+      "id": "gift-items-table",
+      "name": "Gift Items Table Component",
+      "status": "pending",
+      "agent": null,
+      "files": ["components/dashboard/gift-items-table.tsx"]
+    },
+    {
+      "id": "bulk-actions",
+      "name": "Bulk Actions (Open Tabs, Mark Complete)",
+      "status": "pending",
+      "agent": null,
+      "files": ["components/dashboard/action-buttons.tsx"]
+    },
+    {
+      "id": "filters-totals",
+      "name": "Filters and Cost Totals",
+      "status": "pending",
+      "agent": null,
+      "files": ["components/dashboard/filter-bar.tsx", "components/dashboard/totals-display.tsx"]
+    },
+    {
+      "id": "add-edit-modals",
+      "name": "Add/Edit Item Modals",
+      "status": "pending",
+      "agent": null,
+      "files": ["components/modals/add-item-modal.tsx", "components/modals/edit-item-modal.tsx"]
+    }
+  ],
+  "notes": "Agents should only update the 'status' and 'agent' fields. Do not modify feature definitions."
+}
