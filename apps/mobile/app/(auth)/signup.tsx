@@ -1,0 +1,246 @@
+import { useState } from 'react'
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  ActivityIndicator,
+} from 'react-native'
+import { Link, router } from 'expo-router'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { useAuth } from '../../providers/AuthProvider'
+import { colors } from '../../lib/constants/colors'
+
+export default function SignupScreen() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const { signUp } = useAuth()
+
+  const handleSignup = async () => {
+    if (!email || !password) {
+      setError('Please enter email and password')
+      return
+    }
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match')
+      return
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters')
+      return
+    }
+
+    setError('')
+    setIsLoading(true)
+
+    const { error } = await signUp(email, password)
+
+    if (error) {
+      setError(error.message)
+      setIsLoading(false)
+    } else {
+      setSuccess(true)
+      setIsLoading(false)
+    }
+  }
+
+  if (success) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.content}>
+          <Text style={styles.title}>Check your email</Text>
+          <Text style={styles.successText}>
+            We've sent you a confirmation link. Please check your email to verify your account.
+          </Text>
+          <Link href="/(auth)/login" asChild>
+            <Pressable style={styles.button}>
+              <Text style={styles.buttonText}>Back to Sign In</Text>
+            </Pressable>
+          </Link>
+        </View>
+      </SafeAreaView>
+    )
+  }
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboardView}
+      >
+        <View style={styles.content}>
+          <Text style={styles.title}>GiftSync</Text>
+          <Text style={styles.subtitle}>Create your account</Text>
+
+          {error ? <Text style={styles.error}>{error}</Text> : null}
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Email</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="you@example.com"
+              placeholderTextColor={colors.textMuted}
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              autoComplete="email"
+              keyboardType="email-address"
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Password</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="At least 6 characters"
+              placeholderTextColor={colors.textMuted}
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              autoComplete="new-password"
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Confirm Password</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Re-enter your password"
+              placeholderTextColor={colors.textMuted}
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              secureTextEntry
+              autoComplete="new-password"
+            />
+          </View>
+
+          <Pressable
+            style={({ pressed }) => [
+              styles.button,
+              pressed && styles.buttonPressed,
+              isLoading && styles.buttonDisabled,
+            ]}
+            onPress={handleSignup}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <ActivityIndicator color={colors.text} />
+            ) : (
+              <Text style={styles.buttonText}>Create Account</Text>
+            )}
+          </Pressable>
+
+          <View style={styles.footer}>
+            <Text style={styles.footerText}>Already have an account? </Text>
+            <Link href="/(auth)/login" asChild>
+              <Pressable>
+                <Text style={styles.link}>Sign In</Text>
+              </Pressable>
+            </Link>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  keyboardView: {
+    flex: 1,
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: '700',
+    color: colors.text,
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    marginBottom: 32,
+  },
+  successText: {
+    fontSize: 16,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    marginBottom: 32,
+    lineHeight: 24,
+  },
+  error: {
+    color: colors.danger,
+    textAlign: 'center',
+    marginBottom: 16,
+    fontSize: 14,
+  },
+  inputContainer: {
+    marginBottom: 16,
+  },
+  label: {
+    color: colors.text,
+    fontSize: 14,
+    fontWeight: '500',
+    marginBottom: 8,
+  },
+  input: {
+    backgroundColor: colors.card,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    fontSize: 16,
+    color: colors.text,
+  },
+  button: {
+    backgroundColor: colors.accent,
+    borderRadius: 8,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  buttonPressed: {
+    backgroundColor: colors.accentPressed,
+  },
+  buttonDisabled: {
+    opacity: 0.7,
+  },
+  buttonText: {
+    color: colors.text,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 24,
+  },
+  footerText: {
+    color: colors.textSecondary,
+    fontSize: 14,
+  },
+  link: {
+    color: colors.accent,
+    fontSize: 14,
+    fontWeight: '500',
+  },
+})
