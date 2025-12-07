@@ -1,10 +1,10 @@
-# GiftWise Strategic Research (December 2024)
+# GiftSync Strategic Research (December 2024)
 
 ## Core Differentiator: The Reverse Wishlist
 
 **Traditional wishlists** (Amazon, Giftster, etc.): Recipient creates list → shares with givers → "here's what I want"
 
-**GiftWise (reverse wishlist)**: Giver creates list FOR recipient → coordinates with other givers → "here's what we're getting them"
+**GiftSync (reverse wishlist)**: Giver creates list FOR recipient → coordinates with other givers → "here's what we're getting them"
 
 This is a fundamentally different product:
 - **Giver-centric**, not recipient-centric
@@ -46,7 +46,7 @@ The reverse wishlist model serves multiple markets:
 | **MyRegistry** | Recipient-created | Complex, 5% cash fee |
 | **Target/Walmart** | Recipient-created | Single retailer lock-in |
 
-**Gap**: None of these let givers proactively plan and coordinate. GiftWise fills this gap.
+**Gap**: None of these let givers proactively plan and coordinate. GiftSync fills this gap.
 
 ---
 
@@ -93,7 +93,7 @@ What we have:
 
 From competitor reviews and market research:
 
-| Pain Point | GiftWise Solution |
+| Pain Point | GiftSync Solution |
 |------------|-------------------|
 | "Grandparents bought duplicates" | Real-time status sync across collaborators |
 | "Don't know what others are getting" | Shared list with purchase status |
@@ -127,7 +127,7 @@ From competitor reviews and market research:
 
 ---
 
-## What Makes GiftWise Unique
+## What Makes GiftSync Unique
 
 1. **Giver-centric** (reverse wishlist model) ← Core differentiator
 2. **Multi-giver collaboration** ← Built and ready

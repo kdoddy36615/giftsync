@@ -162,7 +162,7 @@ export function DashboardShell({ lists, items, links }: DashboardShellProps) {
         <div className="bg-[#141414] border border-[#2d2d2d] rounded-lg p-12 text-center">
           <div className="text-5xl mb-4">🎁</div>
           <h2 className="text-2xl font-bold text-[#e4e4e7] mb-2">
-            Welcome to GiftWise!
+            Welcome to GiftSync!
           </h2>
           <p className="text-[#a1a1aa] mb-6">
             Plan gifts for multiple people, compare prices, and shop smarter with bulk actions.
