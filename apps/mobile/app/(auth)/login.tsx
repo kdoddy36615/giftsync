@@ -40,6 +40,20 @@ export default function LoginScreen() {
     }
   }
 
+  const handleDemoLogin = async () => {
+    setError('')
+    setIsLoading(true)
+
+    const { error } = await signIn('demo@test.com', 'TestPassword123!')
+
+    if (error) {
+      setError(error.message)
+      setIsLoading(false)
+    } else {
+      router.replace('/(tabs)')
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -93,6 +107,24 @@ export default function LoginScreen() {
             ) : (
               <Text style={styles.buttonText}>Sign In</Text>
             )}
+          </Pressable>
+
+          <View style={styles.divider}>
+            <View style={styles.dividerLine} />
+            <Text style={styles.dividerText}>or</Text>
+            <View style={styles.dividerLine} />
+          </View>
+
+          <Pressable
+            style={({ pressed }) => [
+              styles.demoButton,
+              pressed && styles.demoButtonPressed,
+              isLoading && styles.buttonDisabled,
+            ]}
+            onPress={handleDemoLogin}
+            disabled={isLoading}
+          >
+            <Text style={styles.demoButtonText}>Demo Login</Text>
           </Pressable>
 
           <View style={styles.footer}>
@@ -174,6 +206,37 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   buttonText: {
+    color: colors.text,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  divider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 16,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: colors.border,
+  },
+  dividerText: {
+    color: colors.textMuted,
+    paddingHorizontal: 12,
+    fontSize: 14,
+  },
+  demoButton: {
+    backgroundColor: colors.cardDark,
+    borderRadius: 8,
+    paddingVertical: 14,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  demoButtonPressed: {
+    backgroundColor: colors.border,
+  },
+  demoButtonText: {
     color: colors.text,
     fontSize: 16,
     fontWeight: '600',
