@@ -1,179 +1,140 @@
-# GiftSync - Multi-User Gift Planning Application
+# GiftSync - Multi-User Gift Planning Monorepo
 
 ## Project Overview
 
-GiftSync is a web application that helps users manage gift lists for multiple people with multi-retailer price comparison and bulk shopping workflows. Originally built as a personal tool, it's being transformed into a public multi-user application.
+GiftSync is a gift planning application with multi-retailer price comparison and collaborative shopping workflows. This monorepo contains both the web and mobile apps.
 
-## MVP Reference (IMPORTANT)
+## Monorepo Structure
 
-The working MVP is in **`./reference/`**:
-
-| File | Purpose |
-|------|---------|
-| `reference/gift-planner-tabbed.html` | Main UI - HTML structure + CSS styling to replicate |
-| `reference/gift-app.js` | JavaScript logic - selection, bulk actions, filters, tab switching |
-| `reference/gift-data.js` | Data structure - schema reference for items |
-
-**ALWAYS reference the MVP first when implementing features** to understand:
-- How the UI should look (dark theme, colors, layout)
-- How interactions should work (click to select, bulk actions)
-- Data structure and field names
-
-To view the MVP in browser: open `reference/gift-planner-tabbed.html` directly.
+```
+giftsync/
+├── apps/
+│   ├── web/                 # Next.js 16 web app
+│   │   ├── CLAUDE.md        # Web-specific instructions
+│   │   └── PROGRESS.md      # Web progress tracking
+│   └── mobile/              # Expo React Native app
+│       ├── CLAUDE.md        # Mobile-specific instructions
+│       └── PROGRESS.md      # Mobile progress tracking
+├── packages/
+│   ├── shared/              # Shared types, constants, utils
+│   ├── api-client/          # API client for mobile
+│   └── hooks/               # Shared React hooks
+├── .claude/
+│   ├── agents/              # Specialized Claude agents
+│   └── commands/            # Slash commands
+├── CLAUDE.md                # This file (monorepo overview)
+├── PROGRESS.md              # Cross-app progress tracking
+├── PIVOT-RESEARCH.md        # Strategic research
+├── turbo.json               # Turborepo config
+├── pnpm-workspace.yaml      # pnpm workspace config
+└── package.json             # Root workspace package
+```
 
 ## Tech Stack
 
-- **Framework:** Next.js 16 (App Router)
-- **Language:** TypeScript (strict mode)
-- **Styling:** TailwindCSS
-- **Database:** Supabase (PostgreSQL)
-- **Auth:** Supabase Auth
-- **Deployment:** Vercel
-
-## Architecture
-
-```
-app/
-├── (auth)/          # Authentication pages (login, signup)
-├── (dashboard)/     # Main app interface
-└── api/             # API routes
-
-components/
-├── ui/              # Reusable primitives (Button, Input, Modal)
-├── dashboard/       # Gift list components
-└── modals/          # Add/Edit item modals
-
-lib/
-├── supabase/        # Supabase client utilities
-└── utils/           # Utility functions
-
-types/               # TypeScript type definitions
-hooks/               # React hooks
-```
+| App | Stack |
+|-----|-------|
+| Web | Next.js 16, TypeScript, TailwindCSS v4, Supabase, Vercel |
+| Mobile | Expo, React Native, TypeScript, expo-secure-store, EAS |
+| Shared | pnpm workspaces, Turborepo |
 
 ## Key Commands
 
 ```bash
-npm run dev          # Start development server (localhost:3000)
-npm run build        # Production build
-npm run lint         # Run ESLint
-npm run type-check   # TypeScript type checking
+# Monorepo root
+pnpm install              # Install all dependencies
+pnpm dev                  # Start web app dev server
+pnpm build                # Build web app
+pnpm dev:mobile           # Start Expo dev server
+pnpm test                 # Run web tests
+
+# Web app (from apps/web/)
+npm run dev               # Start dev server (localhost:3000)
+npm run build             # Production build
+npm run type-check        # TypeScript check
+
+# Mobile app (from apps/mobile/)
+npx expo start            # Start Expo dev server
+eas build --profile development --platform android
+eas build --profile development --platform ios
 ```
 
-## Code Standards
+## Progress Tracking
 
-### TypeScript
-- Use strict mode
-- Export types/interfaces for all components
-- Use `type` for object shapes, `interface` for extendable contracts
+| File | Purpose |
+|------|---------|
+| `PROGRESS.md` | Root - cross-app status overview |
+| `apps/web/PROGRESS.md` | Web app feature progress |
+| `apps/mobile/PROGRESS.md` | Mobile app feature progress |
 
-### Components
-- Use `forwardRef` for all UI primitives
-- Follow kebab-case for file names (e.g., `gift-items-table.tsx`)
-- Use PascalCase for component names
-
-### Styling
-- Dark theme by default:
-  - Background: `#0f0f0f`
-  - Card: `#141414`
-  - Border: `#2d2d2d`
-  - Text: `#e4e4e7`
-  - Accent: `#6366f1` (indigo)
-  - Danger: `#dc2626` (red)
-- Use Tailwind classes, avoid custom CSS
-- Use `cn()` utility for conditional classes
-
-### State Management
-- Selection state: React `useState` (per-session)
-- Completed status: Supabase DB (persistent)
-- Use React hooks for data fetching
-
-## Database Schema
-
-### Tables
-- `gift_lists` - People you're shopping for
-- `gift_items` - Individual gift items
-- `retailer_links` - Store URLs and prices per item
-
-### Key Fields
-- Items have `status` ('required' | 'optional')
-- Items can be `is_completed` (purchased)
-- Retailer links have `is_best_price` and `is_highend` flags
-
-## Features
-
-### Core
-- Multi-tab interface (one tab per person)
-- Click-to-select rows for bulk actions
-- Multi-retailer price comparison per item
-- Mark items as purchased (persistent)
-
-### Bulk Actions
-- Select All / Select Required / Select Optional / Clear
-- Open Cheapest / Open Highend / Open Amazon tabs
-- Mark selected as Purchased / Unpurchase
-
-### UX
-- Privacy blur toggle (spacebar)
-- Running cost totals (Required / Optional / Combined)
-- Filter by status and value tags
+Use the `/status` command or `monorepo-overseer` agent to sync progress across apps.
 
 ## Agent Team
 
-This project uses 10 specialized Claude subagents:
-
 | Agent | Model | Purpose |
 |-------|-------|---------|
-| `architect` | opus | Plans features, designs component architecture |
-| `product-owner` | opus | Prioritization, feature decisions, product vision |
-| `project-manager` | sonnet | Coordinates agents, tracks progress, can spawn agents |
-| `code-reviewer` | sonnet | Reviews code quality, patterns, best practices |
-| `qa-tester` | sonnet | Tests functionality, finds edge cases |
-| `security` | sonnet | Audits for vulnerabilities, auth, data safety |
-| `designer` | sonnet | UI consistency, dark theme, visual polish |
-| `ux` | sonnet | User flows, interaction design, usability |
-| `researcher` | haiku | Quick docs lookup, best practices, solutions |
-| `cost-director` | haiku | Monitors token usage, optimizes agent efficiency |
+| `architect` | opus | Plans features, designs architecture |
+| `product-owner` | opus | Prioritization, feature decisions |
+| `project-manager` | sonnet | Coordinates agents, tracks progress |
+| `monorepo-overseer` | haiku | Syncs progress across apps |
+| `code-reviewer` | sonnet | Reviews code quality |
+| `qa-tester` | sonnet | Tests functionality |
+| `security` | sonnet | Audits for vulnerabilities |
+| `designer` | sonnet | UI consistency |
+| `ux` | sonnet | User flows, usability |
+| `researcher` | haiku | Docs lookup, solutions |
+| `cost-director` | haiku | Token usage monitoring |
+| `component-builder` | haiku | Builds dashboard components |
 
-**Hierarchy:**
-- `product-owner` + `architect` = Strategic decisions (opus)
-- `project-manager` = Orchestration, can create new agents
-- Others = Specialized execution
+## Database Schema
 
-## Coordination Files
+Shared across web and mobile via Supabase:
 
-- `claude-progress.txt` - Work log for agent sessions
-- `AGENTS.md` - File claims and shared contracts
-- `feature-status.json` - Feature completion tracking
+- `gift_lists` - People you're shopping for
+- `gift_items` - Individual gift items
+- `retailer_links` - Store URLs and prices per item
+- `list_collaborators` - Shared access to lists
+- `invites` - Pending collaboration invites
+
+## Dark Theme Colors (Shared)
+
+```
+Background: #0f0f0f
+Card: #141414
+Border: #2d2d2d
+Text: #e4e4e7
+Accent: #6366f1 (indigo)
+Success: #10b981 (green)
+Danger: #dc2626 (red)
+```
+
+## Per-App Instructions
+
+See each app's CLAUDE.md for app-specific instructions:
+- `apps/web/CLAUDE.md` - Web app patterns, Supabase server client
+- `apps/mobile/CLAUDE.md` - Mobile patterns, SecureStore, EAS builds
+
+## MVP Reference
+
+The original MVP is in `apps/web/reference/`:
+- `gift-planner-tabbed.html` - UI structure and styling
+- `gift-app.js` - Interaction logic
+- `gift-data.js` - Data structure
+
+Reference these when implementing matching features in mobile.
 
 ## Environment Variables
 
+### Web (`apps/web/.env.local`)
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+OPENAI_API_KEY=your_openai_key
 ```
 
-## Quick Reference
-
-### Supabase Client
-```typescript
-// Browser (Client Components)
-import { createClient } from '@/lib/supabase/client'
-const supabase = createClient()
-
-// Server (Server Components, Actions)
-import { createClient } from '@/lib/supabase/server'
-const supabase = await createClient()
-```
-
-### Database Types
-```typescript
-import type { GiftList, GiftItem, RetailerLink } from '@/types/database'
-```
-
-### UI Components
-```typescript
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Modal } from '@/components/ui/modal'
+### Mobile (`apps/mobile/.env`)
+```env
+EXPO_PUBLIC_SUPABASE_URL=your_supabase_url
+EXPO_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+EXPO_PUBLIC_API_URL=https://giftsync.vercel.app
 ```

@@ -2,12 +2,12 @@
   "permissions": {
     "allow": [
       "Bash(curl:*)",
-      "Bash(move \"C:\\Users\\kevin\\projects\\giftwise\\app\\(dashboard)\\page.tsx\" \"C:\\Users\\kevin\\projects\\giftwise\\app\\(dashboard)\\dashboard\\page.tsx\")",
       "Bash(git add:*)",
       "Bash(npm run type-check:*)",
       "Bash(npm run build:*)",
       "Bash(npx tsc:*)",
       "Bash(npm run lint)",
+      "Bash(pnpm:*)",
       "WebSearch",
       "WebFetch(domain:www.listful.com)",
       "WebFetch(domain:www.moonsift.com)",
@@ -16,14 +16,14 @@
       "Bash(find:*)",
       "Bash(npm run test:*)",
       "Bash(npm test:*)",
-      "Bash(dir C:Userskevinprojects)",
       "Bash(npx vercel:*)",
       "Bash(vercel whoami:*)",
       "Bash(vercel ls:*)",
       "Bash(git checkout:*)",
       "Bash(vercel --yes)",
       "Bash(vercel:*)",
-      "Bash(npx npm-check-updates:*)"
+      "Bash(npx npm-check-updates:*)",
+      "Bash(npx turbo:*)"
     ],
     "deny": [],
     "ask": []

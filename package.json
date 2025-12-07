@@ -1,43 +1,28 @@
 {
-  "name": "giftassist",
+  "name": "giftsync",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage",
-    "type-check": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@supabase/ssr": "^0.8.0",
-    "@supabase/supabase-js": "^2.86.2",
-    "clsx": "^2.1.1",
-    "next": "16.0.7",
-    "openai": "^6.10.0",
-    "react": "19.2.1",
-    "react-dom": "19.2.1",
-    "tailwind-merge": "^3.4.0"
+    "dev": "turbo dev --filter=@giftsync/web",
+    "dev:web": "turbo dev --filter=@giftsync/web",
+    "dev:mobile": "turbo dev --filter=@giftsync/mobile",
+    "build": "turbo build",
+    "build:web": "turbo build --filter=@giftsync/web",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "type-check": "turbo type-check",
+    "clean": "rm -rf node_modules apps/*/node_modules packages/*/node_modules apps/*/.next apps/*/.turbo .turbo",
+    "clean:turbo": "rm -rf .turbo apps/*/.turbo packages/*/.turbo"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^14.6.1",
-    "@types/node": "^24",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@vitejs/plugin-react": "^5.1.1",
-    "@vitest/coverage-v8": "^4.0.15",
-    "@vitest/ui": "^4.0.15",
-    "eslint": "^9",
-    "eslint-config-next": "16.0.7",
-    "jsdom": "^27.2.0",
-    "tailwindcss": "^4",
-    "typescript": "^5",
-    "vitest": "^4.0.15"
+    "turbo": "^2.5.4"
+  },
+  "packageManager": "pnpm@9.15.2",
+  "engines": {
+    "node": ">=20"
   }
 }

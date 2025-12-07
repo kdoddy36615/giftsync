@@ -16,18 +16,18 @@ Build dashboard UI components that match the reference MVP exactly. Follow dark 
 ## Critical Files to Reference
 
 1. **MVP Reference:**
-   - `C:\Users\kevin\projects\giftwise\reference\gift-planner-tabbed.html` - UI structure and styling
-   - `C:\Users\kevin\projects\giftwise\reference\gift-app.js` - Interaction logic
+   - `apps/web/reference/gift-planner-tabbed.html` - UI structure and styling
+   - `apps/web/reference/gift-app.js` - Interaction logic
 
 2. **Existing Foundation:**
-   - `C:\Users\kevin\projects\giftwise\types\database.ts` - Database types (GiftList, GiftItem, RetailerLink)
-   - `C:\Users\kevin\projects\giftwise\types\dashboard.ts` - Dashboard types (DashboardData, SelectionState)
-   - `C:\Users\kevin\projects\giftwise\hooks\use-selection.ts` - Selection hook
-   - `C:\Users\kevin\projects\giftwise\hooks\use-privacy-blur.ts` - Privacy blur hook
-   - `C:\Users\kevin\projects\giftwise\hooks\use-bulk-open.ts` - Bulk tab opening hook
-   - `C:\Users\kevin\projects\giftwise\components\ui\button.tsx` - Button component
-   - `C:\Users\kevin\projects\giftwise\components\ui\input.tsx` - Input component
-   - `C:\Users\kevin\projects\giftwise\components\ui\modal.tsx` - Modal component
+   - `apps/web/types/database.ts` - Database types (GiftList, GiftItem, RetailerLink)
+   - `apps/web/types/dashboard.ts` - Dashboard types (DashboardData, SelectionState)
+   - `apps/web/hooks/use-selection.ts` - Selection hook
+   - `apps/web/hooks/use-privacy-blur.ts` - Privacy blur hook
+   - `apps/web/hooks/use-bulk-open.ts` - Bulk tab opening hook
+   - `apps/web/components/ui/button.tsx` - Button component
+   - `apps/web/components/ui/input.tsx` - Input component
+   - `apps/web/components/ui/modal.tsx` - Modal component
 
 ## Dark Theme Colors (STRICT)
 
@@ -57,7 +57,7 @@ bg-[#dc2626]      // Red (danger)
 
 ### File Naming
 - Use kebab-case: `gift-list-tabs.tsx`, `action-buttons.tsx`
-- Place in `C:\Users\kevin\projects\giftwise\components\dashboard\`
+- Place in `apps/web/components/dashboard/`
 
 ### TypeScript
 - Export props interface for every component
