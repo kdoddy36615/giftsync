@@ -120,6 +120,73 @@ export interface Database {
           created_at?: string
         }
       }
+      list_members: {
+        Row: {
+          id: string
+          list_id: string
+          user_id: string
+          role: 'owner' | 'editor' | 'viewer'
+          invited_by: string | null
+          invited_at: string
+          accepted_at: string | null
+        }
+        Insert: {
+          id?: string
+          list_id: string
+          user_id: string
+          role?: 'owner' | 'editor' | 'viewer'
+          invited_by?: string | null
+          invited_at?: string
+          accepted_at?: string | null
+        }
+        Update: {
+          id?: string
+          list_id?: string
+          user_id?: string
+          role?: 'owner' | 'editor' | 'viewer'
+          invited_by?: string | null
+          invited_at?: string
+          accepted_at?: string | null
+        }
+      }
+      list_invites: {
+        Row: {
+          id: string
+          list_id: string
+          invite_token: string
+          email: string
+          role: 'editor' | 'viewer'
+          invited_by: string
+          created_at: string
+          expires_at: string
+          accepted_at: string | null
+          accepted_by: string | null
+        }
+        Insert: {
+          id?: string
+          list_id: string
+          invite_token: string
+          email: string
+          role?: 'editor' | 'viewer'
+          invited_by: string
+          created_at?: string
+          expires_at?: string
+          accepted_at?: string | null
+          accepted_by?: string | null
+        }
+        Update: {
+          id?: string
+          list_id?: string
+          invite_token?: string
+          email?: string
+          role?: 'editor' | 'viewer'
+          invited_by?: string
+          created_at?: string
+          expires_at?: string
+          accepted_at?: string | null
+          accepted_by?: string | null
+        }
+      }
     }
     Views: {
       [_ in never]: never
@@ -145,3 +212,11 @@ export type GiftItemUpdate = Database['public']['Tables']['gift_items']['Update'
 export type RetailerLink = Database['public']['Tables']['retailer_links']['Row']
 export type RetailerLinkInsert = Database['public']['Tables']['retailer_links']['Insert']
 export type RetailerLinkUpdate = Database['public']['Tables']['retailer_links']['Update']
+
+export type ListMember = Database['public']['Tables']['list_members']['Row']
+export type ListMemberInsert = Database['public']['Tables']['list_members']['Insert']
+export type ListMemberUpdate = Database['public']['Tables']['list_members']['Update']
+
+export type ListInvite = Database['public']['Tables']['list_invites']['Row']
+export type ListInviteInsert = Database['public']['Tables']['list_invites']['Insert']
+export type ListInviteUpdate = Database['public']['Tables']['list_invites']['Update']

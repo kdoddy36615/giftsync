@@ -18,6 +18,7 @@ import { TotalsDisplay } from './totals-display'
 import { GiftItemsTable } from './gift-items-table'
 import { ItemFormModal } from '@/components/modals/item-form-modal'
 import { ListFormModal } from '@/components/modals/list-form-modal'
+import { InviteModal } from './invite-modal'
 
 export interface DashboardShellProps {
   lists: GiftList[]
@@ -37,6 +38,7 @@ export function DashboardShell({ lists, items, links }: DashboardShellProps) {
   const [editingItem, setEditingItem] = useState<GiftItem | null>(null)
   const [isCreateListOpen, setIsCreateListOpen] = useState(false)
   const [editingList, setEditingList] = useState<GiftList | null>(null)
+  const [sharingList, setSharingList] = useState<GiftList | null>(null)
   const [isMarkingPurchased, setIsMarkingPurchased] = useState(false)
 
   const { isBlurred } = usePrivacyBlur()
@@ -145,6 +147,14 @@ export function DashboardShell({ lists, items, links }: DashboardShellProps) {
     setActiveListId(listId)
   }
 
+  const handleShareList = (list: GiftList) => {
+    setSharingList(list)
+  }
+
+  const handleCloseShareModal = () => {
+    setSharingList(null)
+  }
+
   // Empty state
   if (lists.length === 0) {
     return (
@@ -187,6 +197,7 @@ export function DashboardShell({ lists, items, links }: DashboardShellProps) {
             onTabChange={setActiveListId}
             onCreateList={handleCreateList}
             onEditList={handleEditList}
+            onShareList={handleShareList}
           />
         </DashboardErrorBoundary>
 
@@ -263,6 +274,15 @@ export function DashboardShell({ lists, items, links }: DashboardShellProps) {
         list={editingList || undefined}
         onListCreated={handleListCreated}
       />
+
+      {/* Share/Invite Modal */}
+      {sharingList && (
+        <InviteModal
+          open={true}
+          onClose={handleCloseShareModal}
+          list={sharingList}
+        />
+      )}
 
       {/* Toast Notifications */}
       <ToastContainer toasts={toasts} onClose={dismissToast} />
