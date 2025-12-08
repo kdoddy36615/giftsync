@@ -4,9 +4,13 @@ import { useFonts } from 'expo-font'
 import { Stack, useRouter, useSegments } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import 'react-native-reanimated'
 
 import { AuthProvider, useAuth } from '../providers/AuthProvider'
+import { ToastProvider } from '../providers/ToastProvider'
+import { PrivacyProvider } from '../providers/PrivacyProvider'
+import { BottomSheetModalProvider } from '../components/ui'
 import { colors } from '../lib/constants/colors'
 
 export { ErrorBoundary } from 'expo-router'
@@ -79,8 +83,16 @@ export default function RootLayout() {
   }
 
   return (
-    <AuthProvider>
-      <RootLayoutNav />
-    </AuthProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AuthProvider>
+        <PrivacyProvider>
+          <BottomSheetModalProvider>
+            <ToastProvider>
+              <RootLayoutNav />
+            </ToastProvider>
+          </BottomSheetModalProvider>
+        </PrivacyProvider>
+      </AuthProvider>
+    </GestureHandlerRootView>
   )
 }
