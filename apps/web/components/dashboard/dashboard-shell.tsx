@@ -187,40 +187,18 @@ export function DashboardShell({ lists, items, links }: DashboardShellProps) {
 
   return (
     <div className="space-y-4">
-      {/* Tabs + Filter + Add Button in header row */}
-      <div className="flex justify-between items-start gap-4 flex-wrap">
-        <DashboardErrorBoundary>
-          <GiftListTabs
-            lists={lists}
-            activeListId={activeListId || ''}
-            selectionCounts={selectionCounts}
-            onTabChange={setActiveListId}
-            onCreateList={handleCreateList}
-            onEditList={handleEditList}
-            onShareList={handleShareList}
-          />
-        </DashboardErrorBoundary>
-
-        {/* Desktop: FilterBar + Enhanced Add Button */}
-        <div className="hidden sm:flex gap-4 items-center">
-          <FilterBar activeFilter={filter} onFilterChange={setFilter} />
-          <div className="w-px h-8 bg-[#2d2d2d]" />
-          <button
-            onClick={handleAddItem}
-            className="bg-gradient-to-r from-[#6366f1] to-[#4f46e5] hover:from-[#5558e3] hover:to-[#4338ca] text-white font-bold px-6 py-3 rounded-lg shadow-lg shadow-[rgba(99,102,241,0.4)] transition-all hover:scale-105 whitespace-nowrap flex items-center gap-2"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Add Gift Item
-          </button>
-        </div>
-
-        {/* Mobile: FilterBar only (Add button is FAB below) */}
-        <div className="sm:hidden">
-          <FilterBar activeFilter={filter} onFilterChange={setFilter} />
-        </div>
-      </div>
+      {/* List Tabs row */}
+      <DashboardErrorBoundary>
+        <GiftListTabs
+          lists={lists}
+          activeListId={activeListId || ''}
+          selectionCounts={selectionCounts}
+          onTabChange={setActiveListId}
+          onCreateList={handleCreateList}
+          onEditList={handleEditList}
+          onShareList={handleShareList}
+        />
+      </DashboardErrorBoundary>
 
       {/* Selected Items Banner - only shows when items selected */}
       {selectedCount > 0 && (
@@ -253,8 +231,27 @@ export function DashboardShell({ lists, items, links }: DashboardShellProps) {
           </div>
         ) : (
           <>
-            {/* Totals Display */}
-            <TotalsDisplay items={activeListItems} />
+            {/* Budget + Filters + Add Button section (two columns) */}
+            <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
+              {/* Left column: Budget totals (stacked, fixed width) */}
+              <div className="shrink-0">
+                <TotalsDisplay items={activeListItems} />
+              </div>
+
+              {/* Right column: Filters + Add button (aligned right) */}
+              <div className="flex flex-col items-start sm:items-end gap-4">
+                <FilterBar activeFilter={filter} onFilterChange={setFilter} />
+                <button
+                  onClick={handleAddItem}
+                  className="bg-gradient-to-r from-[#6366f1] to-[#4f46e5] hover:from-[#5558e3] hover:to-[#4338ca] text-white font-bold px-6 py-3 rounded-lg shadow-lg shadow-[rgba(99,102,241,0.4)] transition-all hover:scale-105 whitespace-nowrap flex items-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  Add Gift Item
+                </button>
+              </div>
+            </div>
 
             {/* Gift Items Table */}
             <GiftItemsTable
